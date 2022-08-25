@@ -5,17 +5,25 @@ import { MenuItem, Select } from '@mui/material';
 import styles from './Tours.module.css';
 import { ShoppingCartRounded } from '@mui/icons-material';
 import { useCart } from './useCart.js';
+import { useCurrency } from './useCurrency.js';
 
 function Tours() {
 
     const {
         cartTotal,
         addToCart,
-        deleteFromCart
+        deleteFromCart,
+        cart
     } = useCart();
 
+    const {
+        setCurrency,
+        getCurrencyConversion,
+        currency
+    } = useCurrency();
+
     const handleChange = (event) => {
-        console.log(event.target.value);
+        setCurrency(event.target.value)
     }
 
     return (
@@ -26,7 +34,7 @@ function Tours() {
                     <Select
                         labelId="currency-label"
                         id="currency"
-                        value={0}
+                        value={currency}
                         label="Currency"
                         onChange={handleChange}
                         className={styles.dropdown}
@@ -36,20 +44,26 @@ function Tours() {
                     </Select>
                 </div>
                 <div className={styles.cartContainer}>
-                    {cartTotal > 0 ? <span className={styles.cartTotal}>${cartTotal}</span>: null}
-                    <ShoppingCartRounded 
+                    {cartTotal > 0 ? <span className={styles.cartTotal}>{getCurrencyConversion(cartTotal)}</span> : null}
+                    <ShoppingCartRounded
                         className={styles.cart}
                         fontSize={'large'}
+                        cart={cart}
                     />
+                    {
+                        cart.length > 0 &&
+                        <span className={styles.counter}>{cart.length}</span>
+                    }
                 </div>
             </div>
             <section className={styles.toursContainer}>
                 {tourData.map((tour) =>
-                    <TourItem 
+                    <TourItem
                         key={tour.id}
                         tour={tour}
                         addToCart={addToCart}
                         deleteFromCart={deleteFromCart}
+                        getCurrencyConversion={getCurrencyConversion}
                     />
                 )}
             </section>

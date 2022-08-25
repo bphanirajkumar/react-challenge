@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './TourItem.module.css';
 
 function TourItem(props) {
-    const { tour, addToCart, deleteFromCart } = props
+    const { tour, addToCart, deleteFromCart, getCurrencyConversion } = props
     const image = require("../../assets/images/" + tour.image);
     const [isAdded, setIsAdded] = useState(false);
 
@@ -12,12 +12,12 @@ function TourItem(props) {
             {isAdded ? <span className={styles.inCartBadge}>In Cart</span> : null}
             <div className={styles.tourInfo}>
                 <h3>{tour.tourname}</h3>
-                ${tour.price}
+                {getCurrencyConversion(tour.price)}
                 <p>{tour.description}</p>
             </div>
             {!isAdded ?
-                <button onClick={() => {addToCart(tour); setIsAdded(!isAdded)}}>Add To Cart</button> :
-                <button className={styles.delete} onClick={() => {deleteFromCart(tour); setIsAdded(!isAdded)}}>Delete From Cart</button>
+                <button onClick={() => { addToCart(tour); setIsAdded(!isAdded) }}>Add To Cart</button> :
+                <button className={styles.delete} onClick={() => { deleteFromCart(tour); setIsAdded(!isAdded) }}>Delete From Cart</button>
             }
         </section>
     );
